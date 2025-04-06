@@ -104,7 +104,7 @@ export async function POST(req: NextRequest) {
       breaks: false, // Add <br> on single line breaks
       pedantic: false,
       // smartLists: true, // Removed: Invalid option causing type error
-      smartypants: false,
+      // smartypants: false, // Removed: Also seems invalid for MarkedOptions
     });
 
     // Convert Markdown to HTML
