@@ -69,9 +69,15 @@ export default function Home() {
       const url = URL.createObjectURL(blob);
       setDownloadUrl(url);
 
-    } catch (err: any) {
+    } catch (err) {
       console.error('Conversion failed:', err);
-      setError(err.message || 'An unknown error occurred during conversion.');
+      let errorMessage = 'An unknown error occurred during conversion.';
+      if (err instanceof Error) {
+        errorMessage = err.message;
+      } else if (typeof err === 'string') {
+        errorMessage = err;
+      }
+      setError(errorMessage);
     } finally {
       setIsLoading(false);
     }
