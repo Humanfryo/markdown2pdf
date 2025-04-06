@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { marked } from 'marked';
 import puppeteer from 'puppeteer';
 import hljs from 'highlight.js';
-import markedHighlight from 'marked-highlight';
+import { markedHighlight } from 'marked-highlight';
 
 // Basic CSS to mimic GitHub Markdown style
 const githubMarkdownCSS = `
