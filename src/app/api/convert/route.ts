@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { marked } from 'marked';
 import puppeteer from 'puppeteer';
+import hljs from 'highlight.js';
+import markedHighlight from 'marked-highlight';
 
 // Basic CSS to mimic GitHub Markdown style
 const githubMarkdownCSS = `
@@ -81,11 +83,27 @@ export async function POST(req: NextRequest) {
     }
 
     // Configure marked to use GitHub Flavored Markdown (GFM)
+    marked.use({ gfm: true });
+    marked.use(markedHighlight({
+      langPrefix: 'hljs language-',
+      highlight(code, lang) {
+        const language = hljs.getLanguage(lang) ? lang : 'plaintext';
+        return hljs.highlight(code, { language }).value;
+      }
+    }));
+
+    // Configure marked options (Ensure smartLists is removed or corrected)
     marked.setOptions({
+      renderer: new marked.Renderer(),
+      // highlight: function(code, lang) {
+      //   const language = hljs.getLanguage(lang) ? lang : 'plaintext';
+      //   return hljs.highlight(code, { language }).value;
+      // },
+      // langPrefix: 'hljs language-', // Deprecated: Use marked-highlight
       gfm: true,
       breaks: false, // Add <br> on single line breaks
       pedantic: false,
-      smartLists: true,
+      // smartLists: true, // Removed: Invalid option causing type error
       smartypants: false,
     });
 
