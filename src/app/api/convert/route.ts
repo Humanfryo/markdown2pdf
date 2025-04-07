@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { marked } from 'marked';
-import puppeteer from 'puppeteer';
+import puppeteer from 'puppeteer-core';
+import chromium from '@sparticuz/chromium';
 import hljs from 'highlight.js';
 import { markedHighlight } from 'marked-highlight';
 
@@ -125,10 +126,13 @@ export async function POST(req: NextRequest) {
       </html>
     `;
 
-    // Launch Puppeteer
+    // Launch Puppeteer using puppeteer-core and chromium
     const browser = await puppeteer.launch({
-       headless: true, // Use the new headless mode
-       args: ['--no-sandbox', '--disable-setuid-sandbox'] // Necessary for some environments
+      args: chromium.args,
+      defaultViewport: chromium.defaultViewport,
+      executablePath: await chromium.executablePath(),
+      headless: chromium.headless,
+      // Removed: Old args: ['--no-sandbox', '--disable-setuid-sandbox'] 
     });
     const page = await browser.newPage();
 
