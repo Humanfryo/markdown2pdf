@@ -127,13 +127,20 @@ export async function POST(req: NextRequest) {
     `;
 
     // Launch Puppeteer using puppeteer-core and chromium
+    console.log('Preparing to launch Puppeteer...');
+    const executablePath = await chromium.executablePath();
+    console.log('Chromium Executable Path:', executablePath);
+    console.log('Chromium Args:', chromium.args);
+    console.log('Chromium Headless:', chromium.headless);
+
     const browser = await puppeteer.launch({
       args: chromium.args,
       defaultViewport: chromium.defaultViewport,
-      executablePath: await chromium.executablePath(),
+      executablePath: executablePath, // Use the logged path
       headless: chromium.headless,
-      // Removed: Old args: ['--no-sandbox', '--disable-setuid-sandbox'] 
     });
+
+    console.log('Puppeteer launched successfully.');
     const page = await browser.newPage();
 
     // Set content and generate PDF
